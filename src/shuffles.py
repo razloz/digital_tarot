@@ -32,13 +32,15 @@ class Harmonics(object):
 
 
 class ShuffleGen(object):
-    def __init__(self, deck_size, key_path):
+    def __init__(self, deck_size, key_path, use_harmonics=False):
         """Shuffle Machine."""
-        self._secret = Harmonics(key_path)
+        self._harmonizing = use_harmonics
+        if self._harmonizing:
+            self._secret = Harmonics(key_path)
+            self._last_freq = None
         self._deck = list(range(deck_size))
         self._half_cut = int(deck_size * 0.5)
         self._variance = int(deck_size * 0.1)
-        self._last_freq = None
 
     def next_freq(self):
         seeking = True
@@ -58,7 +60,10 @@ class ShuffleGen(object):
         new_order = list()
         rng = secrets.randbelow
         rnd = lambda x: int(round(x, 0))
-        get_variance = lambda: rnd(rng(self._variance) + self.next_freq())
+        if self._harmonizing:
+            get_variance = lambda: rnd(rng(self._variance) + self.next_freq())
+        else:
+            get_variance = lambda: rnd(rng(self._variance))
         if rng(1) == 0:
             cut_pos = int(self._half_cut + get_variance())
         else:
