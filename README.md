@@ -1,5 +1,7 @@
 # digital_tarot
 
+Required libraries: panda3d & pandas
+
     Digital Tarot was made to demonstrate card shuffling using a 3D engine and audio as a key.
     Copyright (C) 2020  Daniel Ward
 
